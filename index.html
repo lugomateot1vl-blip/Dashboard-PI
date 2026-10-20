@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Escuela Inteligente - Dashboard</title>
+
+  <!-- Fuente e íconos de Google (igual que el modelo original) -->
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded" rel="stylesheet">
+
+  <!-- Nuestro CSS -->
+  <link rel="stylesheet" href="style.css">
+
+  <!-- Librería para el gráfico -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+
+  <!-- ========== BARRA LATERAL ========== -->
+  <aside class="barra-lateral">
+    <h2 class="logo">Escuela Inteligente</h2>
+    <nav>
+      <a href="#resumen" class="enlace activo"><span class="material-symbols-rounded">dashboard</span> Resumen</a>
+      <a href="#alarma" class="enlace"><span class="material-symbols-rounded">shield</span> Alarma</a>
+      <a href="#dispositivos" class="enlace"><span class="material-symbols-rounded">power</span> Dispositivos</a>
+    </nav>
+  </aside>
+
+  <!-- ========== CONTENIDO PRINCIPAL ========== -->
+  <main class="principal">
+
+    <!-- Encabezado -->
+    <header class="encabezado">
+      <h1>Panel de control - Aula 2</h1>
+      <button id="btnTema" class="boton">
+        <span class="material-symbols-rounded">dark_mode</span> Cambiar tema
+      </button>
+    </header>
+
+    <!-- Tarjetas con los valores en tiempo real -->
+    <section id="resumen" class="tarjetas">
+      <div class="tarjeta">
+        <p class="tarjeta-titulo">Temperatura</p>
+        <p class="tarjeta-valor"><span id="valorTemp">--</span> °C</p>
+      </div>
+      <div class="tarjeta">
+        <p class="tarjeta-titulo">Humedad</p>
+        <p class="tarjeta-valor"><span id="valorHum">--</span> %</p>
+      </div>
+      <div class="tarjeta">
+        <p class="tarjeta-titulo">Iluminación</p>
+        <p class="tarjeta-valor" id="valorLuz">--</p>
+      </div>
+      <div class="tarjeta">
+        <p class="tarjeta-titulo">Aire acondicionado</p>
+        <p class="tarjeta-valor" id="valorAire">--</p>
+      </div>
+    </section>
+
+    <!-- Gráfico y alarma lado a lado -->
+    <section class="fila">
+      <div class="caja">
+        <h3>Temperatura en tiempo real</h3>
+        <div class="contenedor-grafico">
+          <canvas id="grafico"></canvas>
+        </div>
+      </div>
+
+      <div class="caja" id="alarma">
+        <h3>Sistema de alarma</h3>
+        <p>Estado actual:</p>
+        <span id="estadoAlarma" class="etiqueta">--</span>
+        <div class="botones">
+          <button id="btnAlarma" class="boton">Activar / Desactivar</button>
+          <button id="btnDisparar" class="boton peligro">Simular disparo</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- Tabla de dispositivos -->
+    <section class="caja" id="dispositivos">
+      <h3>Dispositivos</h3>
+      <table>
+        <thead>
+          <tr><th>Dispositivo</th><th>Estado</th><th>Acción</th></tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Luz</td>
+            <td><span id="tablaLuz" class="etiqueta">--</span></td>
+            <td><button id="btnLuz" class="boton">Encender / Apagar</button></td>
+          </tr>
+          <tr>
+            <td>Aire acondicionado</td>
+            <td><span id="tablaAire" class="etiqueta">--</span></td>
+            <td><button id="btnAire" class="boton">Encender / Apagar</button></td>
+          </tr>
+          <tr>
+            <td>Tomacorrientes</td>
+            <td><span id="tablaTomas" class="etiqueta">--</span></td>
+            <td><button id="btnApagadoTotal" class="boton peligro">Apagado total</button></td>
+          </tr>
+        </tbody>
+      </table>
+    </section>
+
+  </main>
+
+  <!-- Nuestro JavaScript (va al final para que el HTML ya exista) -->
+  <script src="script.js"></script>
+</body>
+</html>

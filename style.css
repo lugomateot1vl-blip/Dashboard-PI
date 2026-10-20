@@ -1,0 +1,139 @@
+/* ========== 1. COLORES (variables) ==========
+   Si querés cambiar los colores del dashboard, solo tocás esta parte. */
+:root {
+  --primario: #8b5cf6;
+  --verde: #10b981;
+  --amarillo: #f59e0b;
+  --rojo: #ef4444;
+  --texto: #1e293b;
+  --texto-suave: #64748b;
+  --fondo: #f8fafc;
+  --caja: #ffffff;
+  --borde: #e2e8f0;
+}
+
+/* Tema oscuro: se activa cuando el body tiene la clase "oscuro" */
+body.oscuro {
+  --texto: #ffffff;
+  --texto-suave: #a3a3a3;
+  --fondo: #111214;
+  --caja: #1f1f1f;
+  --borde: #2d2d2d;
+}
+
+/* ========== 2. BASE ========== */
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  font-family: "Inter", sans-serif;
+  background: var(--fondo);
+  color: var(--texto);
+  display: flex;               /* barra lateral + contenido en fila */
+}
+
+/* ========== 3. BARRA LATERAL ========== */
+.barra-lateral {
+  width: 240px;
+  min-height: 100vh;
+  background: var(--caja);
+  border-right: 1px solid var(--borde);
+  padding: 24px 16px;
+  position: sticky;            /* se queda fija al hacer scroll */
+  top: 0;
+  height: 100vh;
+}
+.logo { color: var(--primario); font-size: 1.2rem; margin-bottom: 24px; }
+
+.enlace {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 12px;
+  border-radius: 8px;
+  color: var(--texto-suave);
+  text-decoration: none;
+  margin-bottom: 4px;
+}
+.enlace:hover, .enlace.activo { background: var(--primario); color: white; }
+
+/* ========== 4. CONTENIDO PRINCIPAL ========== */
+.principal { flex: 1; padding: 24px; min-width: 0; }
+
+.encabezado {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 24px;
+}
+.encabezado h1 { font-size: 1.4rem; }
+
+/* ========== 5. TARJETAS ========== */
+.tarjetas {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); /* se adapta solo */
+  gap: 16px;
+  margin-bottom: 24px;
+}
+.tarjeta, .caja {
+  background: var(--caja);
+  border: 1px solid var(--borde);
+  border-radius: 12px;
+  padding: 20px;
+}
+.tarjeta-titulo { color: var(--texto-suave); font-size: 0.9rem; }
+.tarjeta-valor { font-size: 1.8rem; font-weight: 700; margin-top: 8px; }
+
+/* ========== 6. FILA (gráfico + alarma) ========== */
+.fila {
+  display: grid;
+  grid-template-columns: 2fr 1fr;
+  gap: 16px;
+  margin-bottom: 24px;
+}
+.caja h3 { margin-bottom: 16px; }
+.contenedor-grafico { height: 250px; }   /* Chart.js necesita una altura fija */
+
+/* ========== 7. BOTONES Y ETIQUETAS ========== */
+.boton {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: var(--primario);
+  color: white;
+  border: none;
+  border-radius: 8px;
+  padding: 8px 14px;
+  font-family: inherit;
+  cursor: pointer;
+}
+.boton:hover { opacity: 0.85; }
+.boton.peligro { background: var(--rojo); }
+
+.botones { display: flex; flex-direction: column; gap: 8px; margin-top: 20px; }
+
+.etiqueta {
+  display: inline-block;
+  padding: 4px 12px;
+  border-radius: 999px;
+  color: white;
+  font-weight: 600;
+  margin-top: 8px;
+}
+/* Colores según el estado (el JS cambia la clase) */
+.etiqueta.verde    { background: var(--verde); }
+.etiqueta.amarillo { background: var(--amarillo); }
+.etiqueta.rojo     { background: var(--rojo); }
+.etiqueta.gris     { background: var(--texto-suave); }
+
+/* ========== 8. TABLA ========== */
+table { width: 100%; border-collapse: collapse; }
+th, td { text-align: left; padding: 12px; border-bottom: 1px solid var(--borde); }
+th { color: var(--texto-suave); font-size: 0.85rem; }
+
+/* ========== 9. CELULAR ==========
+   Cuando la pantalla es chica, apilamos todo en una columna. */
+@media (max-width: 800px) {
+  body { flex-direction: column; }
+  .barra-lateral { width: 100%; height: auto; min-height: 0; position: static; }
+  .fila { grid-template-columns: 1fr; }
+}
