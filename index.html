@@ -3,44 +3,41 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Escuela Inteligente - Dashboard</title>
-
-  <!-- Apis de fuente e íconos de Google -->
+  <title>Control de ventilación - Dashboard</title>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
   <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded" rel="stylesheet">
-
-  <!-- Nuestro CSS -->
   <link rel="stylesheet" href="style.css">
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
 <body>
-
   <input type="checkbox" id="menu-toggle" class="menu-toggle">
-
-  <!--  Barra lateral -->
   <aside class="barra-lateral">
-    <h2 class="logo">Escuela Inteligente</h2>
+    <h2 class="logo">Control DHT11</h2>
     <nav>
-      <a href="#resumen" class="enlace"><span class="material-symbols-rounded">dashboard</span> Resumen</a>
-      <a href="#alarma" class="enlace"><span class="material-symbols-rounded">shield</span> Alarma</a>
-      <a href="#dispositivos" class="enlace"><span class="material-symbols-rounded">power</span> Dispositivos</a>
+      <a href="#resumen" class="enlace activo"><span class="material-symbols-rounded">dashboard</span> Resumen</a>
+      <a href="#control" class="enlace"><span class="material-symbols-rounded">air</span> Control</a>
+      <a href="#historial" class="enlace"><span class="material-symbols-rounded">show_chart</span> Historial</a>
     </nav>
   </aside>
 
-  <!-- Pagina Main-->
   <main class="principal">
-
-    <!-- Encabezado -->
     <header class="encabezado">
       <label for="menu-toggle" class="boton-menu" aria-label="Abrir o cerrar menú">
         <span class="material-symbols-rounded">menu</span>
       </label>
-      <h1>Panel de control - Aula 2</h1>
-      <button id="btnTema" class="boton">
-        <span class="material-symbols-rounded">dark_mode</span> Cambiar tema
-      </button>
+      <div>
+        <h1>Ventilación automática</h1>
+        <p class="texto-suave">Arduino Uno · DHT11 · ESP-12E</p>
+      </div>
+      <div class="conexion">
+        <label for="ipEsp">IP del ESP-12E</label>
+        <input id="ipEsp" type="text" inputmode="url" placeholder="Ej.: 192.168.1.25" autocomplete="off">
+        <button id="btnConectar" class="boton">Guardar IP</button>
+        <span id="estadoConexion" class="etiqueta gris">Sin conectar</span>
+        <button id="btnTema" class="boton" aria-label="Cambiar tema"><span class="material-symbols-rounded">dark_mode</span></button>
+      </div>
     </header>
 
-    <!-- Tarjetas con los valores en tiempo real -->
     <section id="resumen" class="tarjetas">
       <div class="tarjeta">
         <p class="tarjeta-titulo">Temperatura</p>
@@ -51,73 +48,73 @@
         <p class="tarjeta-valor"><span id="valorHum">--</span> %</p>
       </div>
       <div class="tarjeta">
-        <p class="tarjeta-titulo">Iluminación</p>
-        <p class="tarjeta-valor" id="valorLuz">--</p>
+        <p class="tarjeta-titulo">Modo</p>
+        <p class="tarjeta-valor" id="valorModo">--</p>
       </div>
       <div class="tarjeta">
-        <p class="tarjeta-titulo">Aire acondicionado</p>
-        <p class="tarjeta-valor" id="valorAire">--</p>
+        <p class="tarjeta-titulo">Ventilador</p>
+        <p class="tarjeta-valor" id="valorFan">--</p>
+      </div>
+      <div class="tarjeta">
+        <p class="tarjeta-titulo">Brillo de iluminación</p>
+        <p class="tarjeta-valor"><span id="valorLuz">--</span> %</p>
       </div>
     </section>
 
-    <!-- Gráfico y alarma lado a lado -->
     <section class="fila">
-      <div class="caja">
+      <div class="caja" id="historial">
         <h3>Temperatura en tiempo real</h3>
-        <div class="contenedor-grafico">
-          <canvas id="grafico"></canvas>
-        </div>
+        <div class="contenedor-grafico"><canvas id="grafico"></canvas></div>
       </div>
 
-      <div class="caja" id="alarma">
-        <h3>Sistema de alarma</h3>
-        <p>Estado actual:</p>
-        <span id="estadoAlarma" class="etiqueta">--</span>
+      <div class="caja" id="control">
+        <h3>Control por humedad</h3>
+        <p>Estado del sistema:</p>
+        <span id="estadoAlarma" class="etiqueta gris">Esperando conexión</span>
+        <p id="detalleEstado" class="detalle">Ingresá la IP que informa el ESP-12E por el Monitor Serie del Arduino.</p>
+        <label class="etiqueta-control" for="controlFanMode">Modo del ventilador</label>
+        <select id="controlFanMode" class="selector-control" disabled>
+          <option value="auto">Automático por humedad</option>
+          <option value="manual">Manual desde la página</option>
+        </select>
         <div class="botones">
-          <button id="btnAlarma" class="boton">Activar / Desactivar</button>
-          <button id="btnDisparar" class="boton peligro">Simular disparo</button>
+          <button id="btnModo" class="boton" disabled>Conectá el ESP-12E</button>
+          <button id="btnFan" class="boton boton-secundario" disabled>Encender ventilador (modo manual)</button>
         </div>
+        <p class="nota">En automático, el ventilador responde al umbral de 70 % cuando el control está armado. En manual, usá el botón para encenderlo o apagarlo.</p>
       </div>
     </section>
 
-    <!-- Tabla de dispositivos -->
     <section class="caja" id="dispositivos">
-      <h3>Dispositivos</h3>
+      <h3>Salidas del circuito</h3>
       <table>
-        <thead>
-          <tr><th>Dispositivo</th><th>Estado</th><th>Acción</th></tr>
-        </thead>
+        <thead><tr><th>Salida</th><th>Estado</th><th>Condición</th></tr></thead>
         <tbody>
-          <tr>
-            <td>Luz</td>
-            <td><span id="tablaLuz" class="etiqueta">--</span></td>
-            <td><button id="btnLuz" class="boton">Encender / Apagar</button></td>
-          </tr>
-          <tr>
-            <td>Aire acondicionado</td>
-            <td><span id="tablaAire" class="etiqueta">--</span></td>
-            <td><button id="btnAire" class="boton">Encender / Apagar</button></td>
-          </tr>
-          <tr>
-            <td>Tomacorrientes</td>
-            <td><span id="tablaTomas" class="etiqueta">--</span></td>
-            <td><button id="btnApagadoTotal" class="boton peligro">Apagado total</button></td>
-          </tr>
+          <tr><td>LED verde</td><td><span id="tablaVerde" class="etiqueta gris">--</span></td><td>Sistema desarmado</td></tr>
+          <tr><td>LED amarillo</td><td><span id="tablaAmarillo" class="etiqueta gris">--</span></td><td>Esperando humedad</td></tr>
+          <tr><td>LED rojo y ventilador</td><td><span id="tablaFan" class="etiqueta gris">--</span></td><td>Humedad ≥ 70 % en automático, o comando manual</td></tr>
+          <tr><td>4 luces</td><td><span id="tablaLuz" class="etiqueta gris">--</span></td><td>Brillo ajustado desde el potenciómetro o la página</td></tr>
         </tbody>
       </table>
     </section>
 
+    <section class="caja control-iluminacion" id="iluminacion">
+      <h3>Control de iluminación</h3>
+      <label class="etiqueta-control" for="controlLightMode">Fuente de control</label>
+      <select id="controlLightMode" class="selector-control" disabled>
+        <option value="pot">Potenciómetro físico</option>
+        <option value="web">Página web</option>
+      </select>
+      <label class="etiqueta-control" for="sliderBrillo">Brillo: <span id="valorBrilloPagina">0 / 255 (0%)</span></label>
+      <input id="sliderBrillo" class="slider-control" type="range" min="0" max="255" step="1" value="0" disabled>
+      <p class="nota">El deslizador se habilita al seleccionar “Página web”. En modo potenciómetro, el brillo lo determina el control conectado a A0.</p>
+    </section>
   </main>
 
   <footer class="pie-pagina">
     <p>Hecho por Nicole Roglich, Denise Roglich y Mateo Lugo.</p>
   </footer>
 
-  <!-- Libreria para utilizar el grafico-->
-
-  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-
-  <!-- Nuestro JavaScript -->
   <script src="script.js"></script>
 </body>
 </html>
