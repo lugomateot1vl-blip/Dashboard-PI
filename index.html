@@ -5,29 +5,26 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Escuela Inteligente - Dashboard</title>
 
-  <!-- Fuente e íconos de Google (igual que el modelo original) -->
+  <!-- Apis de fuente e íconos de Google -->
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
   <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded" rel="stylesheet">
 
   <!-- Nuestro CSS -->
   <link rel="stylesheet" href="style.css">
-
-  <!-- Librería para el gráfico -->
-  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
 <body>
 
-  <!-- ========== BARRA LATERAL ========== -->
+  <!--  Barra lateral -->
   <aside class="barra-lateral">
     <h2 class="logo">Escuela Inteligente</h2>
     <nav>
-      <a href="#resumen" class="enlace activo"><span class="material-symbols-rounded">dashboard</span> Resumen</a>
+      <a href="#resumen" class="enlace"><span class="material-symbols-rounded">dashboard</span> Resumen</a>
       <a href="#alarma" class="enlace"><span class="material-symbols-rounded">shield</span> Alarma</a>
       <a href="#dispositivos" class="enlace"><span class="material-symbols-rounded">power</span> Dispositivos</a>
     </nav>
   </aside>
 
-  <!-- ========== CONTENIDO PRINCIPAL ========== -->
+  <!-- Pagina Main-->
   <main class="principal">
 
     <!-- Encabezado -->
@@ -106,8 +103,11 @@
     </section>
 
   </main>
+  <!-- Libreria para utilizar el grafico-->
 
-  <!-- Nuestro JavaScript (va al final para que el HTML ya exista) -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+  <!-- Nuestro JavaScript -->
   <script src="script.js"></script>
 </body>
 </html>
