@@ -227,8 +227,7 @@ body.oscuro .pie-pagina {
 
 body.oscuro .enlace,
 body.oscuro .tarjeta-titulo,
-body.oscuro th,
-body.oscuro .etiqueta.gris {
+body.oscuro th {
   color: #a3a3a3;
 }
 
@@ -239,6 +238,7 @@ body.oscuro th {
 
 body.oscuro .etiqueta.gris {
   background: #a3a3a3;
+  color: #1e293b;
 }
 
 /* Diseño para celular */
