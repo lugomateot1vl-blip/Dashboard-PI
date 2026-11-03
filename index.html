@@ -14,6 +14,8 @@
 </head>
 <body>
 
+  <input type="checkbox" id="menu-toggle" class="menu-toggle">
+
   <!--  Barra lateral -->
   <aside class="barra-lateral">
     <h2 class="logo">Escuela Inteligente</h2>
@@ -29,6 +31,9 @@
 
     <!-- Encabezado -->
     <header class="encabezado">
+      <label for="menu-toggle" class="boton-menu" aria-label="Abrir o cerrar menú">
+        <span class="material-symbols-rounded">menu</span>
+      </label>
       <h1>Panel de control - Aula 2</h1>
       <button id="btnTema" class="boton">
         <span class="material-symbols-rounded">dark_mode</span> Cambiar tema
@@ -103,6 +108,11 @@
     </section>
 
   </main>
+
+  <footer class="pie-pagina">
+    <p>Hecho por Nicole Roglich, Denise Roglich y Mateo Lugo.</p>
+  </footer>
+
   <!-- Libreria para utilizar el grafico-->
 
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
@@ -110,9 +120,4 @@
   <!-- Nuestro JavaScript -->
   <script src="script.js"></script>
 </body>
-
-  <footer class="pie-pagina">
-    <p>Hecho por Nicole Roglich, Denise Roglich y Mateo Lugo.</p>
-  </footer>
-
 </html>
