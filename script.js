@@ -1,3 +1,5 @@
+const API_BASE = "api/bridge.php";
+
 const valorTemp = document.getElementById("valorTemp");
 const valorHum = document.getElementById("valorHum");
 const valorModo = document.getElementById("valorModo");
@@ -12,31 +14,38 @@ const btnFan = document.getElementById("btnFan");
 const controlLightMode = document.getElementById("controlLightMode");
 const sliderBrillo = document.getElementById("sliderBrillo");
 const valorBrilloPagina = document.getElementById("valorBrilloPagina");
-const ipEsp = document.getElementById("ipEsp");
-
 const tablaVerde = document.getElementById("tablaVerde");
 const tablaAmarillo = document.getElementById("tablaAmarillo");
 const tablaFan = document.getElementById("tablaFan");
 const tablaLuz = document.getElementById("tablaLuz");
-
-let baseEsp = localStorage.getItem("baseEsp") || "";
-ipEsp.value = baseEsp.replace(/^https?:\/\//, "");
 
 function pintarEtiqueta(elemento, texto, color) {
   elemento.textContent = texto;
   elemento.className = `etiqueta ${color}`;
 }
 
-function obtenerBaseEsp() {
-  let valor = ipEsp.value.trim().replace(/\/$/, "");
-  if (!valor) return "";
-  if (!/^https?:\/\//i.test(valor)) valor = `http://${valor}`;
-  return valor;
+async function llamarApi(action, payload = null) {
+  const options = payload === null
+    ? { method: "GET", cache: "no-store" }
+    : {
+        method: "POST",
+        cache: "no-store",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(payload)
+      };
+  const respuesta = await fetch(`${API_BASE}?action=${encodeURIComponent(action)}`, options);
+  const datos = await respuesta.json();
+  if (!respuesta.ok) throw new Error(datos.error || `HTTP ${respuesta.status}`);
+  return datos;
+}
+
+async function enviarComando(command) {
+  return llamarApi("command", { command });
 }
 
 function mostrarDesconectado(mensaje) {
-  pintarEtiqueta(estadoConexion, "Sin conexión", "gris");
-  pintarEtiqueta(estadoAlarma, "Sin conexión", "gris");
+  pintarEtiqueta(estadoConexion, "Esperando Arduino y puente Python", "amarillo");
+  pintarEtiqueta(estadoAlarma, "Sin datos recientes", "gris");
   detalleEstado.textContent = mensaje;
   valorTemp.textContent = "--";
   valorHum.textContent = "--";
@@ -52,34 +61,29 @@ function mostrarDesconectado(mensaje) {
   btnFan.disabled = true;
   controlLightMode.disabled = true;
   sliderBrillo.disabled = true;
-  btnModo.textContent = "Conectá el ESP-12E";
+  btnModo.textContent = "Esperando comunicación USB";
   btnFan.textContent = "Encender ventilador (modo manual)";
 }
 
 async function consultarEstado() {
-  const base = obtenerBaseEsp();
-  if (!base) {
-    mostrarDesconectado("Ingresá la IP del ESP-12E que aparece en el Monitor Serie del Arduino.");
-    return;
-  }
-
   try {
-    const respuesta = await fetch(`${base}/api/status`, { cache: "no-store" });
-    if (!respuesta.ok) throw new Error(`HTTP ${respuesta.status}`);
-    const datos = await respuesta.json();
+    const datos = await llamarApi("state");
+    if (!datos.online) {
+      mostrarDesconectado("Iniciá XAMPP y el puente Python, y conectá el Arduino por USB.");
+      return;
+    }
 
+    pintarEtiqueta(estadoConexion, "Arduino conectado por USB", "verde");
     const brillo = Math.max(0, Math.min(255, Number(datos.brightness) || 0));
     const porcentajeLuz = Math.round(brillo * 100 / 255);
     valorLuz.textContent = porcentajeLuz;
     pintarEtiqueta(tablaLuz, `${porcentajeLuz}%`, porcentajeLuz > 0 ? "verde" : "gris");
     const lightMode = String(datos.lightMode || "POT").toUpperCase();
     controlLightMode.value = lightMode === "WEB" ? "web" : "pot";
-    controlLightMode.disabled = !datos.online;
-    sliderBrillo.disabled = !datos.online || lightMode !== "WEB";
+    controlLightMode.disabled = false;
+    sliderBrillo.disabled = lightMode !== "WEB";
     if (document.activeElement !== sliderBrillo) sliderBrillo.value = brillo;
     valorBrilloPagina.textContent = `${brillo} / 255 (${porcentajeLuz}%)`;
-
-    pintarEtiqueta(estadoConexion, datos.online ? "ESP y Arduino conectados" : "ESP conectado, Arduino sin datos", datos.online ? "verde" : "amarillo");
 
     if (datos.sensorOk) {
       valorTemp.textContent = Number(datos.temperature).toFixed(1);
@@ -95,53 +99,50 @@ async function consultarEstado() {
     const fan = Boolean(datos.fan);
     valorFan.textContent = fan ? "Encendido" : "Apagado";
     controlFanMode.value = controlMode === "MANUAL" ? "manual" : "auto";
-    controlFanMode.disabled = !datos.online;
+    controlFanMode.disabled = false;
     btnFan.dataset.state = fan ? "off" : "on";
     btnFan.textContent = fan ? "Apagar ventilador" : "Encender ventilador";
-    btnFan.disabled = !datos.online || controlMode !== "MANUAL";
+    btnFan.disabled = controlMode !== "MANUAL";
 
     if (controlMode === "MANUAL") {
       valorModo.textContent = "Manual";
       pintarEtiqueta(estadoAlarma, fan ? "MANUAL · ventilador encendido" : "MANUAL · ventilador apagado", fan ? "rojo" : "gris");
-      detalleEstado.textContent = `Control manual desde la página. Humedad actual: ${datos.sensorOk ? `${Number(datos.humidity).toFixed(1)} %` : "sin lectura válida"}.`;
+      detalleEstado.textContent = `Control manual. Humedad actual: ${datos.sensorOk ? `${Number(datos.humidity).toFixed(1)} %` : "sin lectura válida"}.`;
     } else if (modo === "RED" || fan) {
       valorModo.textContent = "Disparado";
       pintarEtiqueta(estadoAlarma, "ROJO · ventilador encendido", "rojo");
       detalleEstado.textContent = datos.sensorOk
         ? `Humedad ${Number(datos.humidity).toFixed(1)} %: alcanzó el umbral de 70 %.`
-        : "El circuito informa ventilador encendido; el DHT11 no está entregando una lectura válida.";
+        : "El ventilador figura encendido, pero el DHT11 no entrega una lectura válida.";
     } else if (modo === "YELLOW") {
       valorModo.textContent = "Armado";
       pintarEtiqueta(estadoAlarma, "AMARILLO · esperando humedad", "amarillo");
       detalleEstado.textContent = datos.sensorOk
-        ? `Control armado. Se activa a partir de 70 % (lectura actual: ${Number(datos.humidity).toFixed(1)} %).`
-        : "Control armado, pero el DHT11 no está entregando una lectura válida.";
+        ? `Control armado. Se activa desde 70 % (lectura: ${Number(datos.humidity).toFixed(1)} %).`
+        : "Control armado, pero el DHT11 no entrega una lectura válida.";
     } else {
       valorModo.textContent = "Verde";
       pintarEtiqueta(estadoAlarma, "VERDE · control desarmado", "verde");
-      detalleEstado.textContent = "El sistema está desarmado. Armá el control para que responda al umbral de humedad.";
+      detalleEstado.textContent = "El sistema está desarmado. Armá el control para responder al umbral de humedad.";
     }
 
     pintarEtiqueta(tablaVerde, modo === "GREEN" ? "Encendido" : "Apagado", modo === "GREEN" ? "verde" : "gris");
     pintarEtiqueta(tablaAmarillo, modo === "YELLOW" ? "Encendido" : "Apagado", modo === "YELLOW" ? "amarillo" : "gris");
     pintarEtiqueta(tablaFan, fan ? "Encendido" : "Apagado", fan ? "rojo" : "gris");
 
-    btnModo.disabled = !datos.online || controlMode === "MANUAL";
-    if (!datos.online) {
-      btnModo.textContent = "Esperando comunicación con Arduino";
-      btnModo.dataset.modo = "";
-    } else if (controlMode === "MANUAL") {
+    btnModo.disabled = controlMode === "MANUAL";
+    if (controlMode === "MANUAL") {
       btnModo.textContent = "Control de humedad disponible en modo automático";
-      btnModo.dataset.modo = "";
+      btnModo.dataset.command = "";
     } else if (modo === "GREEN") {
       btnModo.textContent = "Armar control (amarillo)";
-      btnModo.dataset.modo = "armed";
+      btnModo.dataset.command = "A";
     } else {
       btnModo.textContent = "Desarmar (volver a verde)";
-      btnModo.dataset.modo = "green";
+      btnModo.dataset.command = "G";
     }
   } catch (error) {
-    mostrarDesconectado(`No se pudo consultar ${base}. Verificá que la PC y el ESP estén en la misma red Wi-Fi. (${error.message})`);
+    mostrarDesconectado(`No se pudo consultar la API local de XAMPP: ${error.message}`);
   }
 }
 
@@ -158,64 +159,46 @@ function agregarPuntoGrafico(temperatura) {
   window.graficoTemperatura.update("none");
 }
 
-document.getElementById("btnConectar").addEventListener("click", () => {
-  baseEsp = obtenerBaseEsp();
-  localStorage.setItem("baseEsp", baseEsp);
-  consultarEstado();
-});
-
 btnModo.addEventListener("click", async () => {
-  const base = obtenerBaseEsp();
-  const nuevoModo = btnModo.dataset.modo;
-  if (!base || !nuevoModo) return;
-
+  const command = btnModo.dataset.command;
+  if (!command) return;
   btnModo.disabled = true;
   try {
-    const respuesta = await fetch(`${base}/api/mode?value=${encodeURIComponent(nuevoModo)}`, { cache: "no-store" });
-    if (!respuesta.ok) throw new Error(`HTTP ${respuesta.status}`);
+    await enviarComando(command);
     setTimeout(consultarEstado, 500);
   } catch (error) {
-    mostrarDesconectado(`No se pudo enviar la orden al ESP-12E. (${error.message})`);
+    mostrarDesconectado(`No se pudo encolar la orden: ${error.message}`);
   }
 });
 
 controlFanMode.addEventListener("change", async () => {
-  const base = obtenerBaseEsp();
-  if (!base) return;
   controlFanMode.disabled = true;
   try {
-    const respuesta = await fetch(`${base}/api/fan?mode=${encodeURIComponent(controlFanMode.value)}`, { cache: "no-store" });
-    if (!respuesta.ok) throw new Error(`HTTP ${respuesta.status}`);
-    setTimeout(consultarEstado, 400);
+    await enviarComando(controlFanMode.value === "manual" ? "C,MANUAL" : "C,AUTO");
+    setTimeout(consultarEstado, 500);
   } catch (error) {
-    mostrarDesconectado(`No se pudo cambiar el modo del ventilador. (${error.message})`);
+    mostrarDesconectado(`No se pudo cambiar el modo del ventilador: ${error.message}`);
   }
 });
 
 btnFan.addEventListener("click", async () => {
-  const base = obtenerBaseEsp();
-  const state = btnFan.dataset.state;
-  if (!base || !state) return;
+  const command = btnFan.dataset.state === "on" ? "F,1" : "F,0";
   btnFan.disabled = true;
   try {
-    const respuesta = await fetch(`${base}/api/fan?state=${encodeURIComponent(state)}`, { cache: "no-store" });
-    if (!respuesta.ok) throw new Error(`HTTP ${respuesta.status}`);
-    setTimeout(consultarEstado, 400);
+    await enviarComando(command);
+    setTimeout(consultarEstado, 500);
   } catch (error) {
-    mostrarDesconectado(`No se pudo enviar el comando al ventilador. (${error.message})`);
+    mostrarDesconectado(`No se pudo enviar la orden al ventilador: ${error.message}`);
   }
 });
 
 controlLightMode.addEventListener("change", async () => {
-  const base = obtenerBaseEsp();
-  if (!base) return;
   controlLightMode.disabled = true;
   try {
-    const respuesta = await fetch(`${base}/api/lights?mode=${encodeURIComponent(controlLightMode.value)}`, { cache: "no-store" });
-    if (!respuesta.ok) throw new Error(`HTTP ${respuesta.status}`);
-    setTimeout(consultarEstado, 400);
+    await enviarComando(controlLightMode.value === "web" ? "L,WEB" : "L,POT");
+    setTimeout(consultarEstado, 500);
   } catch (error) {
-    mostrarDesconectado(`No se pudo cambiar el control de iluminación. (${error.message})`);
+    mostrarDesconectado(`No se pudo cambiar la fuente de luz: ${error.message}`);
   }
 });
 
@@ -226,15 +209,13 @@ sliderBrillo.addEventListener("input", () => {
 });
 
 sliderBrillo.addEventListener("change", async () => {
-  const base = obtenerBaseEsp();
-  if (!base || controlLightMode.value !== "web") return;
+  if (controlLightMode.value !== "web") return;
   sliderBrillo.disabled = true;
   try {
-    const respuesta = await fetch(`${base}/api/lights?brightness=${encodeURIComponent(sliderBrillo.value)}`, { cache: "no-store" });
-    if (!respuesta.ok) throw new Error(`HTTP ${respuesta.status}`);
-    setTimeout(consultarEstado, 400);
+    await enviarComando(`B,${sliderBrillo.value}`);
+    setTimeout(consultarEstado, 500);
   } catch (error) {
-    mostrarDesconectado(`No se pudo enviar el brillo a las luces. (${error.message})`);
+    mostrarDesconectado(`No se pudo enviar el brillo: ${error.message}`);
   }
 });
 

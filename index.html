@@ -27,13 +27,10 @@
       </label>
       <div>
         <h1>Ventilación automática</h1>
-        <p class="texto-suave">Arduino Uno · DHT11 · ESP-12E</p>
+        <p class="texto-suave">Arduino Uno · DHT11 · Python · XAMPP</p>
       </div>
       <div class="conexion">
-        <label for="ipEsp">IP del ESP-12E</label>
-        <input id="ipEsp" type="text" inputmode="url" placeholder="Ej.: 192.168.1.25" autocomplete="off">
-        <button id="btnConectar" class="boton">Guardar IP</button>
-        <span id="estadoConexion" class="etiqueta gris">Sin conectar</span>
+        <span id="estadoConexion" class="etiqueta amarillo">Esperando Arduino y puente Python</span>
         <button id="btnTema" class="boton" aria-label="Cambiar tema"><span class="material-symbols-rounded">dark_mode</span></button>
       </div>
     </header>
@@ -71,14 +68,14 @@
         <h3>Control por humedad</h3>
         <p>Estado del sistema:</p>
         <span id="estadoAlarma" class="etiqueta gris">Esperando conexión</span>
-        <p id="detalleEstado" class="detalle">Ingresá la IP que informa el ESP-12E por el Monitor Serie del Arduino.</p>
+        <p id="detalleEstado" class="detalle">Conectá el Uno por USB, iniciá XAMPP y ejecutá el puente Python.</p>
         <label class="etiqueta-control" for="controlFanMode">Modo del ventilador</label>
         <select id="controlFanMode" class="selector-control" disabled>
           <option value="auto">Automático por humedad</option>
           <option value="manual">Manual desde la página</option>
         </select>
         <div class="botones">
-          <button id="btnModo" class="boton" disabled>Conectá el ESP-12E</button>
+          <button id="btnModo" class="boton" disabled>Esperando Arduino por USB</button>
           <button id="btnFan" class="boton boton-secundario" disabled>Encender ventilador (modo manual)</button>
         </div>
         <p class="nota">En automático, el ventilador responde al umbral de 70 % cuando el control está armado. En manual, usá el botón para encenderlo o apagarlo.</p>

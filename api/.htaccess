@@ -1,0 +1,3 @@
+<FilesMatch "^(state\.json|commands\.queue)$">
+    Require all denied
+</FilesMatch>
