@@ -3,115 +3,57 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Control de ventilación - Dashboard</title>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
-  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded" rel="stylesheet">
+  <meta name="theme-color" content="#f5f6fb">
+  <title>Resumen | Control DHT11</title>
+  <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700&family=Material+Symbols+Rounded" rel="stylesheet">
   <link rel="stylesheet" href="style.css">
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <script src="script.js" defer></script>
 </head>
-<body>
+<body data-api-base="api/bridge.php" data-page="resumen" data-metric="temperature">
   <input type="checkbox" id="menu-toggle" class="menu-toggle">
   <aside class="barra-lateral">
-    <h2 class="logo">Control DHT11</h2>
-    <nav>
-      <a href="#resumen" class="enlace activo"><span class="material-symbols-rounded">dashboard</span> Resumen</a>
-      <a href="#control" class="enlace"><span class="material-symbols-rounded">air</span> Control</a>
-      <a href="#historial" class="enlace"><span class="material-symbols-rounded">show_chart</span> Historial</a>
+    <a class="logo" href="index.html"><span class="material-symbols-rounded">air</span><span>Control DHT11</span></a>
+    <nav aria-label="Navegación principal">
+      <a href="index.html" class="enlace activo" aria-current="page"><span class="material-symbols-rounded">dashboard</span> Resumen</a>
+      <a href="control/index.html" class="enlace"><span class="material-symbols-rounded">tune</span> Control</a>
+      <a href="historial/index.html" class="enlace"><span class="material-symbols-rounded">show_chart</span> Historial</a>
     </nav>
+    <div class="lateral-nota"><span class="punto-estado"></span><span>Panel de monitoreo</span></div>
   </aside>
 
   <main class="principal">
     <header class="encabezado">
-      <label for="menu-toggle" class="boton-menu" aria-label="Abrir o cerrar menú">
-        <span class="material-symbols-rounded">menu</span>
-      </label>
-      <div>
-        <h1>Ventilación automática</h1>
-        <p class="texto-suave">Arduino Uno · DHT11 · Python · XAMPP</p>
-      </div>
-      <div class="conexion">
-        <span id="estadoConexion" class="etiqueta amarillo">Esperando Arduino y puente Python</span>
-        <button id="btnTema" class="boton" aria-label="Cambiar tema"><span class="material-symbols-rounded">dark_mode</span></button>
-      </div>
+      <label for="menu-toggle" class="boton-menu" aria-label="Abrir o cerrar menú"><span class="material-symbols-rounded">menu</span></label>
+      <div class="titulo-pagina"><p class="sobretitulo">MONITOREO</p><h1>Resumen del sistema</h1><p class="texto-suave">Lecturas y estado actual de tu proyecto</p></div>
+      <div class="conexion"><span id="estadoConexion" class="etiqueta amarillo"><span class="punto-estado"></span>Esperando conexión</span><button id="btnTema" class="boton-icono" aria-label="Cambiar tema" title="Cambiar tema"><span class="material-symbols-rounded">dark_mode</span></button></div>
     </header>
 
-    <section id="resumen" class="tarjetas">
-      <div class="tarjeta">
-        <p class="tarjeta-titulo">Temperatura</p>
-        <p class="tarjeta-valor"><span id="valorTemp">--</span> °C</p>
-      </div>
-      <div class="tarjeta">
-        <p class="tarjeta-titulo">Humedad</p>
-        <p class="tarjeta-valor"><span id="valorHum">--</span> %</p>
-      </div>
-      <div class="tarjeta">
-        <p class="tarjeta-titulo">Modo</p>
-        <p class="tarjeta-valor" id="valorModo">--</p>
-      </div>
-      <div class="tarjeta">
-        <p class="tarjeta-titulo">Ventilador</p>
-        <p class="tarjeta-valor" id="valorFan">--</p>
-      </div>
-      <div class="tarjeta">
-        <p class="tarjeta-titulo">Brillo de iluminación</p>
-        <p class="tarjeta-valor"><span id="valorLuz">--</span> %</p>
+    <section class="bloque-seccion">
+      <div class="encabezado-seccion"><div><p class="sobretitulo">EN VIVO</p><h2>Estado general</h2></div><span class="texto-suave">Se actualiza cada 2 segundos</span></div>
+      <div class="tarjetas resumen-tarjetas">
+        <button type="button" class="tarjeta tarjeta-metrica seleccionada" data-metric="temperature" aria-pressed="true" aria-label="Ver temperatura en el gráfico">
+          <span class="icono-tarjeta violeta material-symbols-rounded">device_thermostat</span><span class="tarjeta-titulo">Temperatura</span><span class="tarjeta-valor"><span id="valorTemp">--</span><small>°C</small></span><span class="ayuda-tarjeta">Tocá para ver su historial</span>
+        </button>
+        <button type="button" class="tarjeta tarjeta-metrica" data-metric="humidity" aria-pressed="false" aria-label="Ver humedad en el gráfico">
+          <span class="icono-tarjeta celeste material-symbols-rounded">humidity_percentage</span><span class="tarjeta-titulo">Humedad</span><span class="tarjeta-valor"><span id="valorHum">--</span><small>%</small></span><span class="ayuda-tarjeta">Tocá para ver su historial</span>
+        </button>
+        <article class="tarjeta tarjeta-estado"><span class="icono-tarjeta ambar material-symbols-rounded">notifications_active</span><span class="tarjeta-titulo">Control de humedad</span><span class="tarjeta-valor texto-estado" id="valorModo">--</span><span class="ayuda-tarjeta">Modo actual</span></article>
+        <article class="tarjeta tarjeta-estado"><span class="icono-tarjeta verde material-symbols-rounded">mode_fan</span><span class="tarjeta-titulo">Ventilador</span><span class="tarjeta-valor texto-estado" id="valorFan">--</span><span class="ayuda-tarjeta">Estado actual</span></article>
+        <article class="tarjeta tarjeta-estado"><span class="icono-tarjeta rosa material-symbols-rounded">lightbulb</span><span class="tarjeta-titulo">Iluminación</span><span class="tarjeta-valor"><span id="valorLuz">--</span><small>%</small></span><span class="ayuda-tarjeta">Nivel de brillo</span></article>
       </div>
     </section>
 
-    <section class="fila">
-      <div class="caja" id="historial">
-        <h3>Temperatura en tiempo real</h3>
-        <div class="contenedor-grafico"><canvas id="grafico"></canvas></div>
-      </div>
-
-      <div class="caja" id="control">
-        <h3>Control por humedad</h3>
-        <p>Estado del sistema:</p>
-        <span id="estadoAlarma" class="etiqueta gris">Esperando conexión</span>
-        <p id="detalleEstado" class="detalle">Conectá el Uno por USB, iniciá XAMPP y ejecutá el puente Python.</p>
-        <label class="etiqueta-control" for="controlFanMode">Modo del ventilador</label>
-        <select id="controlFanMode" class="selector-control" disabled>
-          <option value="auto">Automático por humedad</option>
-          <option value="manual">Manual desde la página</option>
-        </select>
-        <div class="botones">
-          <button id="btnModo" class="boton" disabled>Esperando Arduino por USB</button>
-          <button id="btnFan" class="boton boton-secundario" disabled>Encender ventilador (modo manual)</button>
-        </div>
-        <p class="nota">En automático, el ventilador responde al umbral de 70 % cuando el control está armado. En manual, usá el botón para encenderlo o apagarlo.</p>
-      </div>
+    <section class="caja caja-grafico">
+      <div class="encabezado-grafico"><div><p class="sobretitulo">HISTORIAL RECIENTE</p><h2 id="tituloGrafico">Temperatura</h2><p id="descripcionGrafico" class="texto-suave">Evolución de las últimas lecturas</p></div><a class="enlace-texto" href="historial/index.html">Ver historial completo <span class="material-symbols-rounded">arrow_forward</span></a></div>
+      <div class="contenedor-grafico"><canvas id="grafico" aria-label="Gráfico de lecturas recientes"></canvas><p id="sinDatosGrafico" class="sin-datos">Esperando las primeras mediciones del sensor…</p></div>
+      <div class="pie-grafico"><span><span class="punto-leyenda"></span><span id="nombreSerie">Temperatura (°C)</span></span><span id="ultimaMuestra">Sin mediciones todavía</span></div>
     </section>
 
-    <section class="caja" id="dispositivos">
-      <h3>Salidas del circuito</h3>
-      <table>
-        <thead><tr><th>Salida</th><th>Estado</th><th>Condición</th></tr></thead>
-        <tbody>
-          <tr><td>LED verde</td><td><span id="tablaVerde" class="etiqueta gris">--</span></td><td>Sistema desarmado</td></tr>
-          <tr><td>LED amarillo</td><td><span id="tablaAmarillo" class="etiqueta gris">--</span></td><td>Esperando humedad</td></tr>
-          <tr><td>LED rojo y ventilador</td><td><span id="tablaFan" class="etiqueta gris">--</span></td><td>Humedad ≥ 70 % en automático, o comando manual</td></tr>
-          <tr><td>4 luces</td><td><span id="tablaLuz" class="etiqueta gris">--</span></td><td>Brillo ajustado desde el potenciómetro o la página</td></tr>
-        </tbody>
-      </table>
-    </section>
-
-    <section class="caja control-iluminacion" id="iluminacion">
-      <h3>Control de iluminación</h3>
-      <label class="etiqueta-control" for="controlLightMode">Fuente de control</label>
-      <select id="controlLightMode" class="selector-control" disabled>
-        <option value="pot">Potenciómetro físico</option>
-        <option value="web">Página web</option>
-      </select>
-      <label class="etiqueta-control" for="sliderBrillo">Brillo: <span id="valorBrilloPagina">0 / 255 (0%)</span></label>
-      <input id="sliderBrillo" class="slider-control" type="range" min="0" max="255" step="1" value="0" disabled>
-      <p class="nota">El deslizador se habilita al seleccionar “Página web”. En modo potenciómetro, el brillo lo determina el control conectado a A0.</p>
-    </section>
+    <section class="tarjeta-ayuda"><span class="material-symbols-rounded">info</span><p>El control automático se activa en la página <a href="control/index.html">Control</a>. Cuando está armado, el ventilador responde al umbral de humedad de 70 %.</p></section>
   </main>
 
-  <footer class="pie-pagina">
-    <p>Hecho por Nicole Roglich, Denise Roglich y Mateo Lugo.</p>
-  </footer>
-
-  <script src="script.js"></script>
+  <footer class="pie-pagina"><span>Control DHT11</span><span>Arduino Uno · Python · XAMPP</span></footer>
 </body>
 </html>
+

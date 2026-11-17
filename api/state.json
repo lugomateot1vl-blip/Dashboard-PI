@@ -1,1 +1,1 @@
-{"sensorOk":false,"temperature":null,"humidity":null,"mode":"YELLOW","controlMode":"MANUAL","lightMode":"POT","fan":false,"brightness":0,"updatedAt":1794261296}
+{"sensorOk":true,"temperature":28.4,"humidity":65,"mode":"GREEN","controlMode":"AUTO","lightMode":"WEB","fan":false,"brightness":97,"lightsEnabled":true,"updatedAt":1794890240}

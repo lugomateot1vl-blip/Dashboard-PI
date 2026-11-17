@@ -42,7 +42,7 @@ if ($action === 'state' && $_SERVER['REQUEST_METHOD'] === 'GET') {
         $state = [
             'sensorOk' => false, 'temperature' => null, 'humidity' => null,
             'mode' => 'GREEN', 'controlMode' => 'AUTO', 'lightMode' => 'POT',
-            'fan' => false, 'brightness' => 0, 'updatedAt' => 0,
+            'fan' => false, 'brightness' => 0, 'lightsEnabled' => true, 'updatedAt' => 0,
         ];
     }
     $updatedAt = (int)($state['updatedAt'] ?? 0);
@@ -56,10 +56,12 @@ if ($action === 'telemetry' && $_SERVER['REQUEST_METHOD'] === 'POST') {
     $mode = $data['mode'] ?? '';
     $control = $data['controlMode'] ?? '';
     $light = $data['lightMode'] ?? '';
+    $lightsEnabled = $data['lightsEnabled'] ?? true;
     $brightness = filter_var($data['brightness'] ?? null, FILTER_VALIDATE_INT);
     if (!in_array($mode, ['GREEN', 'YELLOW', 'RED'], true) ||
         !in_array($control, ['AUTO', 'MANUAL'], true) ||
         !in_array($light, ['POT', 'WEB'], true) ||
+        !is_bool($lightsEnabled) ||
         $brightness === false || $brightness < 0 || $brightness > 255) {
         reply(['error' => 'invalid_telemetry'], 400);
     }
@@ -73,6 +75,7 @@ if ($action === 'telemetry' && $_SERVER['REQUEST_METHOD'] === 'POST') {
         'lightMode' => $light,
         'fan' => ($data['fan'] ?? false) === true,
         'brightness' => $brightness,
+        'lightsEnabled' => $lightsEnabled,
         'updatedAt' => time(),
     ];
     if (!locked_write($statePath, json_encode($state, JSON_UNESCAPED_SLASHES))) {
@@ -84,7 +87,7 @@ if ($action === 'telemetry' && $_SERVER['REQUEST_METHOD'] === 'POST') {
 if ($action === 'command' && $_SERVER['REQUEST_METHOD'] === 'POST') {
     $data = input_json();
     $command = trim((string)($data['command'] ?? ''));
-    $allowed = ['A', 'G', 'C,AUTO', 'C,MANUAL', 'F,1', 'F,0', 'L,POT', 'L,WEB'];
+    $allowed = ['A', 'G', 'C,AUTO', 'C,MANUAL', 'F,1', 'F,0', 'L,POT', 'L,WEB', 'I,ON', 'I,OFF'];
     $validBrightness = preg_match('/^B,(?:[0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])$/', $command) === 1;
     if (!in_array($command, $allowed, true) && !$validBrightness) {
         reply(['error' => 'invalid_command'], 400);
