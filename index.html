@@ -5,56 +5,202 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="theme-color" content="#f5f6fb">
   <title>Resumen | Control DHT11</title>
-  <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700&family=Material+Symbols+Rounded" rel="stylesheet">
+
+  <link
+    href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700&family=Material+Symbols+Rounded"
+    rel="stylesheet"
+  >
   <link rel="stylesheet" href="style.css">
   <link rel="stylesheet" href="resumen.css">
+
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
   <script src="script.js" defer></script>
 </head>
-<body data-api-base="api/bridge.php" data-page="resumen" data-metric="temperature">
+<body
+  data-api-base="api/bridge.php"
+  data-page="resumen"
+  data-metric="temperature"
+>
   <input type="checkbox" id="menu-toggle" class="menu-toggle">
+
   <aside class="barra-lateral">
-    <a class="logo" href="index.html"><span class="material-symbols-rounded">air</span><span>Control DHT11</span></a>
+    <a class="logo" href="index.html">
+      <span class="material-symbols-rounded">air</span>
+      <span>Control DHT11</span>
+    </a>
+
     <nav aria-label="Navegación principal">
-      <a href="index.html" class="enlace activo" aria-current="page"><span class="material-symbols-rounded">dashboard</span> Resumen</a>
-      <a href="control/index.html" class="enlace"><span class="material-symbols-rounded">tune</span> Control</a>
-      <a href="historial/index.html" class="enlace"><span class="material-symbols-rounded">show_chart</span> Historial</a>
+      <a href="index.html" class="enlace activo" aria-current="page">
+        <span class="material-symbols-rounded">dashboard</span>
+        Resumen
+      </a>
+      <a href="control/Control.html" class="enlace">
+        <span class="material-symbols-rounded">tune</span>
+        Control
+      </a>
+      <a href="historial/Historial.html" class="enlace">
+        <span class="material-symbols-rounded">show_chart</span>
+        Historial
+      </a>
     </nav>
-    <div class="lateral-nota"><span class="punto-estado"></span><span>Panel de monitoreo</span></div>
+
+    <div class="lateral-nota">
+      <span class="punto-estado"></span>
+      <span>Panel de monitoreo</span>
+    </div>
   </aside>
 
   <main class="principal">
     <header class="encabezado">
-      <label for="menu-toggle" class="boton-menu" aria-label="Abrir o cerrar menú"><span class="material-symbols-rounded">menu</span></label>
-      <div class="titulo-pagina"><p class="sobretitulo">MONITOREO</p><h1>Resumen del sistema</h1><p class="texto-suave">Lecturas y estado actual de tu proyecto</p></div>
-      <div class="conexion"><span id="estadoConexion" class="etiqueta amarillo"><span class="punto-estado"></span>Esperando conexión</span><button id="btnTema" class="boton-icono" aria-label="Cambiar tema" title="Cambiar tema"><span class="material-symbols-rounded">dark_mode</span></button></div>
+      <label for="menu-toggle" class="boton-menu" aria-label="Abrir o cerrar menú">
+        <span class="material-symbols-rounded">menu</span>
+      </label>
+
+      <div class="titulo-pagina">
+        <p class="sobretitulo">MONITOREO</p>
+        <h1>Resumen del sistema</h1>
+        <p class="texto-suave">Lecturas y estado actual de tu proyecto</p>
+      </div>
+
+      <div class="conexion">
+        <span id="estadoConexion" class="etiqueta amarillo">
+          <span class="punto-estado"></span>
+          Esperando conexión
+        </span>
+        <button
+          id="btnTema"
+          class="boton-icono"
+          aria-label="Cambiar tema"
+          title="Cambiar tema"
+        >
+          <span class="material-symbols-rounded">dark_mode</span>
+        </button>
+      </div>
     </header>
 
     <section class="bloque-seccion">
-      <div class="encabezado-seccion"><div><p class="sobretitulo">EN VIVO</p><h2>Estado general</h2></div><span class="texto-suave">Se actualiza cada 2 segundos</span></div>
+      <div class="encabezado-seccion">
+        <div>
+          <p class="sobretitulo">EN VIVO</p>
+          <h2>Estado general</h2>
+        </div>
+        <span class="texto-suave">Se actualiza cada 2 segundos</span>
+      </div>
+
       <div class="tarjetas resumen-tarjetas">
-        <button type="button" class="tarjeta tarjeta-metrica seleccionada" data-metric="temperature" aria-pressed="true" aria-label="Ver temperatura en el gráfico">
-          <span class="icono-tarjeta violeta material-symbols-rounded">device_thermostat</span><span class="tarjeta-titulo">Temperatura</span><span class="tarjeta-valor"><span id="valorTemp">--</span><small>°C</small></span><span class="ayuda-tarjeta">Tocá para ver su historial</span>
+        <button
+          type="button"
+          class="tarjeta tarjeta-metrica seleccionada"
+          data-metric="temperature"
+          aria-pressed="true"
+          aria-label="Ver temperatura en el gráfico"
+        >
+          <span class="icono-tarjeta violeta material-symbols-rounded">
+            device_thermostat
+          </span>
+          <span class="tarjeta-titulo">Temperatura</span>
+          <span class="tarjeta-valor">
+            <span id="valorTemp">--</span>
+            <small>°C</small>
+          </span>
+          <span class="ayuda-tarjeta">Tocá para ver su historial</span>
         </button>
-        <button type="button" class="tarjeta tarjeta-metrica" data-metric="humidity" aria-pressed="false" aria-label="Ver humedad en el gráfico">
-          <span class="icono-tarjeta celeste material-symbols-rounded">humidity_percentage</span><span class="tarjeta-titulo">Humedad</span><span class="tarjeta-valor"><span id="valorHum">--</span><small>%</small></span><span class="ayuda-tarjeta">Tocá para ver su historial</span>
+
+        <button
+          type="button"
+          class="tarjeta tarjeta-metrica"
+          data-metric="humidity"
+          aria-pressed="false"
+          aria-label="Ver humedad en el gráfico"
+        >
+          <span class="icono-tarjeta celeste material-symbols-rounded">
+            humidity_percentage
+          </span>
+          <span class="tarjeta-titulo">Humedad</span>
+          <span class="tarjeta-valor">
+            <span id="valorHum">--</span>
+            <small>%</small>
+          </span>
+          <span class="ayuda-tarjeta">Tocá para ver su historial</span>
         </button>
-        <article class="tarjeta tarjeta-estado"><span class="icono-tarjeta ambar material-symbols-rounded">notifications_active</span><span class="tarjeta-titulo">Control de humedad</span><span class="tarjeta-valor texto-estado" id="valorModo">--</span><span class="ayuda-tarjeta">Modo actual</span></article>
-        <article class="tarjeta tarjeta-estado"><span class="icono-tarjeta verde material-symbols-rounded">mode_fan</span><span class="tarjeta-titulo">Ventilador</span><span class="tarjeta-valor texto-estado" id="valorFan">--</span><span class="ayuda-tarjeta">Estado actual</span></article>
-        <article class="tarjeta tarjeta-estado"><span class="icono-tarjeta rosa material-symbols-rounded">lightbulb</span><span class="tarjeta-titulo">Iluminación</span><span class="tarjeta-valor"><span id="valorLuz">--</span><small>%</small></span><span class="ayuda-tarjeta">Nivel de brillo</span></article>
+
+        <article class="tarjeta tarjeta-estado">
+          <span class="icono-tarjeta ambar material-symbols-rounded">
+            notifications_active
+          </span>
+          <span class="tarjeta-titulo">Control de humedad</span>
+          <span class="tarjeta-valor texto-estado" id="valorModo">--</span>
+          <span class="ayuda-tarjeta">Modo actual</span>
+        </article>
+
+        <article class="tarjeta tarjeta-estado">
+          <span class="icono-tarjeta verde material-symbols-rounded">
+            mode_fan
+          </span>
+          <span class="tarjeta-titulo">Ventilador</span>
+          <span class="tarjeta-valor texto-estado" id="valorFan">--</span>
+          <span class="ayuda-tarjeta">Estado actual</span>
+        </article>
+
+        <article class="tarjeta tarjeta-estado">
+          <span class="icono-tarjeta rosa material-symbols-rounded">
+            lightbulb
+          </span>
+          <span class="tarjeta-titulo">Iluminación</span>
+          <span class="tarjeta-valor">
+            <span id="valorLuz">--</span>
+            <small>%</small>
+          </span>
+          <span class="ayuda-tarjeta">Nivel de brillo</span>
+        </article>
       </div>
     </section>
 
     <section class="caja caja-grafico">
-      <div class="encabezado-grafico"><div><p class="sobretitulo">HISTORIAL RECIENTE</p><h2 id="tituloGrafico">Temperatura</h2><p id="descripcionGrafico" class="texto-suave">Evolución de las últimas lecturas</p></div><a class="enlace-texto" href="historial/index.html">Ver historial completo <span class="material-symbols-rounded">arrow_forward</span></a></div>
-      <div class="contenedor-grafico"><canvas id="grafico" aria-label="Gráfico de lecturas recientes"></canvas><p id="sinDatosGrafico" class="sin-datos">Esperando las primeras mediciones del sensor…</p></div>
-      <div class="pie-grafico"><span><span class="punto-leyenda"></span><span id="nombreSerie">Temperatura (°C)</span></span><span id="ultimaMuestra">Sin mediciones todavía</span></div>
+      <div class="encabezado-grafico">
+        <div>
+          <p class="sobretitulo">HISTORIAL RECIENTE</p>
+          <h2 id="tituloGrafico">Temperatura</h2>
+          <p id="descripcionGrafico" class="texto-suave">
+            Evolución de las últimas lecturas
+          </p>
+        </div>
+
+        <a class="enlace-texto" href="historial/Historial.html">
+          Ver historial completo
+          <span class="material-symbols-rounded">arrow_forward</span>
+        </a>
+      </div>
+
+      <div class="contenedor-grafico">
+        <canvas id="grafico" aria-label="Gráfico de lecturas recientes"></canvas>
+        <p id="sinDatosGrafico" class="sin-datos">
+          Esperando las primeras mediciones del sensor…
+        </p>
+      </div>
+
+      <div class="pie-grafico">
+        <span>
+          <span class="punto-leyenda"></span>
+          <span id="nombreSerie">Temperatura (°C)</span>
+        </span>
+        <span id="ultimaMuestra">Sin mediciones todavía</span>
+      </div>
     </section>
 
-    <section class="tarjeta-ayuda"><span class="material-symbols-rounded">info</span><p>El control automático se activa en la página <a href="control/index.html">Control</a>. Cuando está armado, el ventilador responde al umbral de humedad de 70 %.</p></section>
+    <section class="tarjeta-ayuda">
+      <span class="material-symbols-rounded">info</span>
+      <p>
+        El control automático se activa en la página
+        <a href="control/Control.html">Control</a>. Cuando está armado,
+        el ventilador responde al umbral de humedad de 70 %.
+      </p>
+    </section>
   </main>
 
-  <footer class="pie-pagina"><span>Control DHT11</span><span>Arduino Uno · Python · XAMPP</span></footer>
+  <footer class="pie-pagina">
+    <span>Control DHT11</span>
+    <span>Arduino Uno · Python · XAMPP</span>
+  </footer>
 </body>
 </html>
-
