@@ -1,0 +1,46 @@
+/* Estilos exclusivos de la página Historial */
+
+.selector-metrica {
+  display: inline-flex;
+  gap: 4px;
+  padding: 3px;
+  border: 1px solid #e2e8f0;
+  border-radius: 8px;
+}
+
+.filtro-grafico {
+  padding: 7px 11px;
+  border: 0;
+  border-radius: 6px;
+  background: transparent;
+  color: #64748b;
+  cursor: pointer;
+}
+
+.filtro-grafico.activo {
+  background: #8b5cf6;
+  color: #fff;
+}
+
+.caja-tabla-historial {
+  margin-top: 20px;
+}
+
+.celda-vacia {
+  color: #64748b;
+  text-align: center;
+}
+
+body.oscuro .selector-metrica {
+  background: #171717;
+}
+
+@media (max-width: 520px) {
+  .selector-metrica {
+    width: 100%;
+  }
+
+  .filtro-grafico {
+    flex: 1;
+  }
+}

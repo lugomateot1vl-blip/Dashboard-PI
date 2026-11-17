@@ -1,0 +1,139 @@
+/* Estilos exclusivos de la página Control */
+
+.estado-sistema {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  margin-bottom: 18px;
+}
+
+.estado-sistema-icono,
+.icono-panel {
+  display: inline-flex;
+  flex: 0 0 42px;
+  align-items: center;
+  justify-content: center;
+  width: 42px;
+  height: 42px;
+  border-radius: 10px;
+  background: #f0eaff;
+  color: #7c3aed;
+  font-size: 22px;
+}
+
+.estado-sistema-texto .sobretitulo,
+.titulo-panel .texto-suave {
+  margin-bottom: 5px;
+}
+
+.estado-sistema-texto .texto-suave,
+.titulo-panel .texto-suave {
+  font-size: 0.85rem;
+}
+
+.estado-sistema h2,
+.titulo-panel h2 {
+  font-size: 1.15rem;
+}
+
+.titulo-panel {
+  display: flex;
+  align-items: center;
+  gap: 11px;
+  margin-bottom: 18px;
+}
+
+.rejilla-control {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 16px;
+  margin-bottom: 20px;
+}
+
+.panel-control {
+  min-width: 0;
+}
+
+.etiqueta-control {
+  display: block;
+  margin-top: 18px;
+  color: var(--texto-suave);
+  font-size: 0.9rem;
+}
+
+.selector-control {
+  width: 100%;
+  margin-top: 8px;
+  padding: 10px 12px;
+  border: 1px solid var(--borde-control);
+  border-radius: 8px;
+  background: var(--fondo-control);
+  color: inherit;
+  font: inherit;
+}
+
+.selector-control:disabled,
+.slider-control:disabled {
+  opacity: 0.55;
+}
+
+.slider-control {
+  display: block;
+  width: 100%;
+  margin-top: 12px;
+  accent-color: var(--primario);
+}
+
+.estado-componente {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 14px;
+  padding: 10px 12px;
+  border-radius: 8px;
+  background: #f8fafc;
+  font-size: 0.88rem;
+}
+
+.boton-secundario {
+  background: #475569;
+}
+
+.boton:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.tabla-salidas {
+  margin-bottom: 0;
+}
+
+body.oscuro .icono-panel.violeta,
+body.oscuro .estado-sistema-icono {
+  background: #30264b;
+  color: #c4b5fd;
+}
+
+body.oscuro .icono-panel.rosa {
+  background: #3d2134;
+  color: #f9a8d4;
+}
+
+body.oscuro .estado-componente {
+  background: #171717;
+}
+
+body.oscuro .selector-control {
+  background: #1f1f1f;
+  border-color: #2d2d2d;
+}
+
+@media (max-width: 800px) {
+  .rejilla-control {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .botones .boton {
+    justify-content: center;
+    width: 100%;
+  }
+}
