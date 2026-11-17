@@ -614,3 +614,84 @@ body.oscuro .pie-grafico {
     transition-duration: 0.01ms !important;
   }
 }
+
+/* Ajustes simples para encabezados y contenido en pantallas chicas */
+@media (max-width: 800px) {
+  .encabezado {
+    display: grid;
+    grid-template-columns: 40px minmax(0, 1fr);
+    grid-template-areas:
+      "menu titulo"
+      "conexion conexion";
+    align-items: start;
+    column-gap: 12px;
+    row-gap: 12px;
+  }
+
+  .boton-menu {
+    grid-area: menu;
+    margin-top: 2px;
+  }
+
+  .titulo-pagina {
+    grid-area: titulo;
+    min-width: 0;
+  }
+
+  .titulo-pagina h1 {
+    font-size: clamp(1.1rem, 5vw, 1.4rem);
+    line-height: 1.25;
+    overflow-wrap: anywhere;
+  }
+
+  .titulo-pagina .texto-suave {
+    line-height: 1.4;
+  }
+
+  .conexion {
+    grid-area: conexion;
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) 40px;
+    align-items: center;
+    justify-content: stretch;
+    width: 100%;
+    gap: 10px;
+  }
+
+  .conexion .etiqueta {
+    justify-self: start;
+    max-width: 100%;
+    line-height: 1.3;
+    white-space: normal;
+  }
+
+  .conexion .boton-icono {
+    grid-column: 2;
+    grid-row: 1;
+  }
+
+  .encabezado-seccion > .texto-suave {
+    line-height: 1.4;
+    text-align: left;
+  }
+
+  .contenedor-grafico {
+    height: clamp(220px, 62vw, 280px);
+  }
+
+  .tabla-desbordable table {
+    min-width: 540px;
+    table-layout: auto;
+  }
+}
+
+@media (max-width: 420px) {
+  .principal {
+    padding: 12px;
+  }
+
+  .tarjeta,
+  .caja {
+    padding: 14px;
+  }
+}

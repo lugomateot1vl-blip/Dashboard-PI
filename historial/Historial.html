@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="theme-color" content="#f5f6fb">
-  <title>Historial | Control DHT11</title>
+  <title>Historial | Sistema Salon 2</title>
 
   <link
     href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700&family=Material+Symbols+Rounded"
@@ -16,13 +16,14 @@
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
   <script src="../script.js" defer></script>
 </head>
+
 <body data-api-base="../api/bridge.php" data-page="historial" data-metric="humidity">
   <input type="checkbox" id="menu-toggle" class="menu-toggle">
 
   <aside class="barra-lateral">
     <a class="logo" href="../index.html">
       <span class="material-symbols-rounded">air</span>
-      <span>Control DHT11</span>
+      <span>Sistema Salon 2</span>
     </a>
 
     <nav aria-label="Navegación principal">
@@ -30,10 +31,12 @@
         <span class="material-symbols-rounded">dashboard</span>
         Resumen
       </a>
+
       <a href="../control/Control.html" class="enlace">
         <span class="material-symbols-rounded">tune</span>
         Control
       </a>
+
       <a href="Historial.html" class="enlace activo" aria-current="page">
         <span class="material-symbols-rounded">show_chart</span>
         Historial
@@ -63,6 +66,7 @@
           <span class="punto-estado"></span>
           Esperando conexión
         </span>
+
         <button
           id="btnTema"
           class="boton-icono"
@@ -93,12 +97,13 @@
           >
             Humedad
           </button>
-          
+
           <button
             type="button"
             class="filtro-grafico"
             data-metric="temperature"
-            aria-pressed="false" >
+            aria-pressed="false"
+          >
             Temperatura
           </button>
         </div>
@@ -126,6 +131,7 @@
           <p class="sobretitulo">ÚLTIMOS REGISTROS</p>
           <h2>Mediciones recientes</h2>
         </div>
+
         <span id="cantidadRegistros" class="texto-suave">0 registros</span>
       </div>
 
@@ -139,6 +145,7 @@
               <th>Estado</th>
             </tr>
           </thead>
+
           <tbody id="filasHistorial">
             <tr>
               <td colspan="4" class="celda-vacia">Todavía no hay datos guardados.</td>
@@ -155,8 +162,7 @@
   </main>
 
   <footer class="pie-pagina">
-    <span>Control DHT11</span>
-    <span>Arduino Uno · Python · XAMPP</span>
+    <span>Proyecto de Nicole Roglich, Denise Roglich y Mateo Lugo</span>
   </footer>
 </body>
 </html>
