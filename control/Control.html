@@ -1,24 +1,30 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
+
+  <!-- lo básico para que el navegador sepa cómo mostrar la página -->
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="theme-color" content="#f5f6fb">
   <title>Control | Sistema Salon 2</title>
 
-  <link
-    href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700&family=Material+Symbols+Rounded"
-    rel="stylesheet"
-  >
+  <!-- cargamos la letra, los iconos y los estilos -->
+  <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700&family=Material+Symbols+Rounded" rel="stylesheet">
   <link rel="stylesheet" href="../style.css">
   <link rel="stylesheet" href="control.css">
 
+  <!-- este archivo actualiza los datos y maneja los controles -->
   <script src="../script.js" defer></script>
+
 </head>
 <body data-api-base="../api/bridge.php" data-page="control">
+
+  <!-- este checkbox abre y cierra el menú en el celular -->
   <input type="checkbox" id="menu-toggle" class="menu-toggle">
 
+  <!-- menú para ir de una página a otra -->
   <aside class="barra-lateral">
+
     <a class="logo" href="../index.html">
       <span class="material-symbols-rounded">air</span>
       <span>Sistema Salon 2</span>
@@ -29,10 +35,12 @@
         <span class="material-symbols-rounded">dashboard</span>
         Resumen
       </a>
+
       <a href="Control.html" class="enlace activo" aria-current="page">
         <span class="material-symbols-rounded">tune</span>
         Control
       </a>
+
       <a href="../historial/Historial.html" class="enlace">
         <span class="material-symbols-rounded">show_chart</span>
         Historial
@@ -41,12 +49,17 @@
 
     <div class="lateral-nota">
       <span class="punto-estado"></span>
-      <span>Control del sistema</span>
+      <p>Control del sistema</p>
     </div>
+
   </aside>
 
+  <!-- acá va el contenido de esta página -->
   <main class="principal">
+
+    <!-- título, conexión y botón para cambiar el tema -->
     <header class="encabezado">
+
       <label for="menu-toggle" class="boton-menu" aria-label="Abrir o cerrar menú">
         <span class="material-symbols-rounded">menu</span>
       </label>
@@ -58,25 +71,27 @@
       </div>
 
       <div class="conexion">
+
         <span id="estadoConexion" class="etiqueta amarillo">
           <span class="punto-estado"></span>
           Esperando conexión
         </span>
-        <button
-          id="btnTema"
-          class="boton-icono"
-          aria-label="Cambiar tema"
-          title="Cambiar tema"
-        >
+
+        <button id="btnTema" class="boton-icono" aria-label="Cambiar tema" title="Cambiar tema">
           <span class="material-symbols-rounded">dark_mode</span>
         </button>
+
       </div>
+
     </header>
 
+    <!-- acá vemos si el arduino está conectado -->
     <section class="caja estado-sistema">
+
       <div class="estado-sistema-icono">
         <span class="material-symbols-rounded">sensors</span>
       </div>
+
       <div class="estado-sistema-texto">
         <p class="sobretitulo">ESTADO DEL SISTEMA</p>
         <h2 id="estadoAlarma">Esperando conexión</h2>
@@ -84,10 +99,15 @@
           Conectá el Uno por USB, iniciá XAMPP y ejecutá el puente Python.
         </p>
       </div>
+
     </section>
 
+    <!-- la cuadrícula separa los controles del ventilador y la luz -->
     <div class="rejilla-control">
+
       <section class="caja panel-control">
+
+        <!-- controles del ventilador -->
         <div class="titulo-panel">
           <span class="icono-panel violeta material-symbols-rounded">mode_fan</span>
           <div>
@@ -96,33 +116,42 @@
           </div>
         </div>
 
-        <label class="etiqueta-control" for="controlFanMode">Modo de funcionamiento</label>
-        <select id="controlFanMode" class="selector-control" disabled>
-          <option value="auto">Automático por humedad</option>
-          <option value="manual">Manual desde la página</option>
-        </select>
+        <!-- desde acá se elige el modo y se maneja el ventilador -->
+        <form class="formulario-control">
 
-        <div class="estado-componente">
-          <span class="texto-suave">Estado actual</span>
-          <strong id="valorFan">--</strong>
-        </div>
+          <label class="etiqueta-control" for="controlFanMode">Modo de funcionamiento</label>
+          <select id="controlFanMode" class="selector-control" disabled>
+            <option value="auto">Automático por humedad</option>
+            <option value="manual">Manual desde la página</option>
+          </select>
 
-        <div class="botones">
-          <button id="btnModo" class="boton" disabled>
-            Esperando Arduino por USB
-          </button>
-          <button id="btnFan" class="boton boton-secundario" disabled>
-            Encender ventilador (modo manual)
-          </button>
-        </div>
+          <div class="estado-componente">
+            <p class="texto-suave">Estado actual</p>
+            <strong id="valorFan">--</strong>
+          </div>
+
+          <div class="botones">
+            <button id="btnModo" class="boton" type="button" disabled>
+              Esperando Arduino por USB
+            </button>
+
+            <button id="btnFan" class="boton boton-secundario" type="button" disabled>
+              Encender ventilador (modo manual)
+            </button>
+          </div>
+
+        </form>
 
         <p class="nota">
           En automático, el ventilador responde al umbral de 70 % cuando el control está armado.
           En manual, usá el botón para encenderlo o apagarlo.
         </p>
+
       </section>
 
       <section class="caja panel-control">
+
+        <!-- controles de iluminación -->
         <div class="titulo-panel">
           <span class="icono-panel rosa material-symbols-rounded">lightbulb</span>
           <div>
@@ -131,57 +160,63 @@
           </div>
         </div>
 
-        <label class="etiqueta-control" for="controlLightMode">Fuente de control</label>
-        <select id="controlLightMode" class="selector-control" disabled>
-          <option value="pot">Potenciómetro físico</option>
-          <option value="web">Página web</option>
-        </select>
+        <!-- desde acá se elige de dónde viene la luz y se regula el brillo -->
+        <form class="formulario-control">
 
-        <label class="etiqueta-control" for="sliderBrillo">
-          Brillo:
-          <span id="valorBrilloPagina">0 / 255 (0%)</span>
-        </label>
-        <input
-          id="sliderBrillo"
-          class="slider-control"
-          type="range"
-          min="0"
-          max="255"
-          step="1"
-          value="0"
-          disabled
-        >
+          <label class="etiqueta-control" for="controlLightMode">Fuente de control</label>
+          <select id="controlLightMode" class="selector-control" disabled>
+            <option value="pot">Potenciómetro físico</option>
+            <option value="web">Página web</option>
+          </select>
 
-        <div class="estado-componente">
-          <span class="texto-suave">Brillo aplicado</span>
-          <strong><span id="valorLuz">--</span>%</strong>
-        </div>
+          <label class="etiqueta-control" for="sliderBrillo">
+            Brillo:
+            <span id="valorBrilloPagina">0 / 255 (0%)</span>
+          </label>
 
-        <div class="botones">
-          <button
-            id="btnCorteLuz"
-            class="boton boton-secundario"
-            type="button"
+          <input
+            id="sliderBrillo"
+            class="slider-control"
+            type="range"
+            min="0"
+            max="255"
+            step="1"
+            value="0"
             disabled
           >
-            Apagar completamente
-          </button>
-        </div>
+
+          <div class="estado-componente">
+            <p class="texto-suave">Brillo aplicado</p>
+            <strong><span id="valorLuz">--</span>%</strong>
+          </div>
+
+          <div class="botones">
+            <button id="btnCorteLuz" class="boton boton-secundario" type="button" disabled>
+              Apagar completamente
+            </button>
+          </div>
+
+        </form>
 
         <p class="nota">
           El deslizador se habilita al seleccionar “Página web”. En modo potenciómetro,
           el brillo lo determina el control conectado a A0.
         </p>
+
       </section>
+
     </div>
 
+    <!-- esta tabla muestra qué salidas del circuito están activas -->
     <section class="caja tabla-salidas">
+
       <div class="encabezado-seccion">
         <div>
           <p class="sobretitulo">VISTA DEL CIRCUITO</p>
           <h2>Salidas</h2>
         </div>
-        <span class="texto-suave">Estado actualizado en vivo</span>
+
+        <p class="texto-suave">Estado actualizado en vivo</p>
       </div>
 
       <div class="tabla-desbordable">
@@ -193,22 +228,26 @@
               <th>Condición</th>
             </tr>
           </thead>
+
           <tbody>
             <tr>
               <td>LED verde</td>
               <td><span id="tablaVerde" class="etiqueta gris">--</span></td>
               <td>Sistema desarmado</td>
             </tr>
+
             <tr>
               <td>LED amarillo</td>
               <td><span id="tablaAmarillo" class="etiqueta gris">--</span></td>
               <td>Esperando humedad</td>
             </tr>
+
             <tr>
               <td>LED rojo y ventilador</td>
               <td><span id="tablaFan" class="etiqueta gris">--</span></td>
               <td>Humedad ≥ 70 % en automático, o comando manual</td>
             </tr>
+
             <tr>
               <td>Iluminación (D9–D11)</td>
               <td><span id="tablaLuz" class="etiqueta gris">--</span></td>
@@ -217,11 +256,15 @@
           </tbody>
         </table>
       </div>
+
     </section>
+
   </main>
 
+  <!-- acá van los créditos del proyecto -->
   <footer class="pie-pagina">
-    <span>Proyecto de Nicole Roglich, Denise Roglich y Mateo Lugo</span>
+    <p>Proyecto de Nicole Roglich, Denise Roglich y Mateo Lugo</p>
   </footer>
+
 </body>
 </html>

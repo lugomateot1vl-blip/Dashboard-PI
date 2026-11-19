@@ -1,3 +1,4 @@
+// acá guardamos la configuración y los datos que se usan en las páginas
 const API_BASE = document.body.dataset.apiBase || "api/bridge.php";
 const CLAVE_HISTORIAL = "dht11-muestras-v1";
 const MAX_HISTORIAL = 720;
@@ -6,6 +7,7 @@ const metricas = {
   humidity: { titulo: "Humedad", unidad: "%", color: "#0ea5e9", fondo: "rgba(14, 165, 233, 0.12)", campo: "humidity" }
 };
 
+// referencias a los textos, botones y controles del html
 const $ = (id) => document.getElementById(id);
 const elementos = {
   valorTemp: $("valorTemp"), valorHum: $("valorHum"), valorModo: $("valorModo"), valorFan: $("valorFan"), valorLuz: $("valorLuz"),
@@ -14,11 +16,13 @@ const elementos = {
   valorBrilloPagina: $("valorBrilloPagina"), tablaVerde: $("tablaVerde"), tablaAmarillo: $("tablaAmarillo"), tablaFan: $("tablaFan"), tablaLuz: $("tablaLuz")
 };
 
+// estado que se conserva mientras está abierta la página
 let historial = leerHistorial();
 let metricaActual = document.body.dataset.metric || "temperature";
 let grafico = null;
 let estadoRecibido = null;
 
+// leemos y guardamos las mediciones en este navegador
 function leerHistorial() {
   try {
     const datos = JSON.parse(localStorage.getItem(CLAVE_HISTORIAL) || "[]");
@@ -32,10 +36,11 @@ function guardarHistorial() {
   try {
     localStorage.setItem(CLAVE_HISTORIAL, JSON.stringify(historial.slice(-MAX_HISTORIAL)));
   } catch (_) {
-    // Si el navegador no permite guardar localmente, la página sigue mostrando la lectura en vivo.
+    // si el navegador no deja guardar, igual se siguen mostrando los datos en vivo
   }
 }
 
+// funciones para mostrar estados y comunicarse con el puente
 function pintarEtiqueta(elemento, texto, color) {
   if (!elemento) return;
   elemento.textContent = texto;
@@ -56,6 +61,7 @@ function enviarComando(command) {
   return llamarApi("command", { command });
 }
 
+// damos formato a la hora y cambiamos la medición que muestra el gráfico
 function formatearHora(time, incluirFecha = false) {
   const fecha = new Date(time);
   return incluirFecha
@@ -63,6 +69,7 @@ function formatearHora(time, incluirFecha = false) {
     : fecha.toLocaleTimeString("es-AR", { hour: "2-digit", minute: "2-digit", second: "2-digit" });
 }
 
+// marcamos qué medición se eligió y actualizamos el título del gráfico
 function actualizarSelectorMetrica() {
   document.querySelectorAll("button[data-metric]").forEach((boton) => {
     const activo = boton.dataset.metric === metricaActual;
@@ -82,6 +89,7 @@ function datosVisibles() {
   return historial.slice(-limite);
 }
 
+// armamos el gráfico con las lecturas que corresponden a esta página
 function dibujarHistorial() {
   const canvas = $("grafico");
   const metrica = metricas[metricaActual];
@@ -133,6 +141,7 @@ function agregarMuestra(datos) {
   dibujarTablaHistorial();
 }
 
+// mostramos una tabla con las lecturas más recientes
 function dibujarTablaHistorial() {
   const cuerpo = $("filasHistorial");
   if (!cuerpo) return;
@@ -157,6 +166,7 @@ function dibujarTablaHistorial() {
   if ($("cantidadRegistros")) $("cantidadRegistros").textContent = `${historial.length} ${historial.length === 1 ? "registro" : "registros"}`;
 }
 
+// mostramos un mensaje cuando no hay conexión
 function mostrarDesconectado(mensaje) {
   pintarEtiqueta(elementos.estadoConexion, "Esperando Arduino y puente Python", "amarillo");
   pintarEtiqueta(elementos.estadoAlarma, "Sin datos recientes", "gris");
@@ -168,6 +178,7 @@ function mostrarDesconectado(mensaje) {
   if (elementos.btnFan) elementos.btnFan.textContent = "Encender ventilador (modo manual)";
 }
 
+// preguntamos al puente por los datos más recientes del arduino
 async function consultarEstado() {
   try {
     const datos = await llamarApi("state");
@@ -247,9 +258,8 @@ async function consultarEstado() {
       else { elementos.btnModo.textContent = "Desarmar (volver a verde)"; elementos.btnModo.dataset.command = "G"; }
     }
   } catch (error) {
-    // La API pudo responder correctamente y el fallo ocurrir al actualizar un gráfico
-    // u otro elemento. No borres las lecturas recibidas: muestra el error para poder
-    // distinguir un problema visual de una desconexión real.
+    // puede fallar la actualización de un gráfico aunque la api haya respondido
+    // dejamos las últimas lecturas en pantalla y mostramos el error
     estadoRecibido = null;
     console.error("Error al actualizar el dashboard:", error);
     pintarEtiqueta(elementos.estadoConexion, `Error al actualizar: ${error.message}`, "rojo");
@@ -257,6 +267,7 @@ async function consultarEstado() {
   }
 }
 
+// evitamos mandar otra orden mientras esperamos la respuesta
 async function conBotonBloqueado(elemento, accion, mensajeError) {
   if (!elemento) return;
   elemento.disabled = true;
@@ -268,6 +279,13 @@ if (elementos.btnModo) elementos.btnModo.addEventListener("click", () => {
   const command = elementos.btnModo.dataset.command;
   if (command) conBotonBloqueado(elementos.btnModo, () => enviarComando(command), "No se pudo encolar la orden");
 });
+
+// estos formularios cambian los controles en la misma página, sin recargarla
+document.querySelectorAll(".formulario-control").forEach((formulario) => {
+  formulario.addEventListener("submit", (evento) => evento.preventDefault());
+});
+
+// eventos de los botones y controles
 if (elementos.controlFanMode) elementos.controlFanMode.addEventListener("change", () => conBotonBloqueado(elementos.controlFanMode, () => enviarComando(elementos.controlFanMode.value === "manual" ? "C,MANUAL" : "C,AUTO"), "No se pudo cambiar el modo del ventilador"));
 if (elementos.btnFan) elementos.btnFan.addEventListener("click", () => {
   const command = elementos.btnFan.dataset.state === "on" ? "F,1" : "F,0";
@@ -290,17 +308,20 @@ if (elementos.sliderBrillo) {
   });
 }
 
+// cambiamos entre temperatura y humedad en los gráficos
 document.querySelectorAll("button[data-metric]").forEach((boton) => boton.addEventListener("click", () => {
   metricaActual = boton.dataset.metric in metricas ? boton.dataset.metric : "temperature";
   actualizarSelectorMetrica();
 }));
 
+// el tema elegido queda guardado para la próxima visita
 document.querySelectorAll("#btnTema").forEach((boton) => boton.addEventListener("click", () => {
   document.body.classList.toggle("oscuro");
   localStorage.setItem("dht11-tema", document.body.classList.contains("oscuro") ? "oscuro" : "claro");
 }));
 if (localStorage.getItem("dht11-tema") === "oscuro") document.body.classList.add("oscuro");
 
+// carga inicial y consulta periódica del estado
 actualizarSelectorMetrica();
 dibujarTablaHistorial();
 consultarEstado();

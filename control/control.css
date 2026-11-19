@@ -1,4 +1,4 @@
-/* Estilos exclusivos de la página Control */
+/* estilos que solo se usan en control */
 
 .estado-sistema {
   display: flex;
@@ -57,7 +57,7 @@
 .etiqueta-control {
   display: block;
   margin-top: 18px;
-  color: var(--texto-suave);
+  color: #64748b;
   font-size: 0.9rem;
 }
 
@@ -65,9 +65,9 @@
   width: 100%;
   margin-top: 8px;
   padding: 10px 12px;
-  border: 1px solid var(--borde-control);
+  border: 1px solid #cbd5e1;
   border-radius: 8px;
-  background: var(--fondo-control);
+  background: #ffffff;
   color: inherit;
   font: inherit;
 }
@@ -81,7 +81,7 @@
   display: block;
   width: 100%;
   margin-top: 12px;
-  accent-color: var(--primario);
+  accent-color: #8b5cf6;
 }
 
 .estado-componente {
@@ -92,6 +92,10 @@
   border-radius: 8px;
   background: #f8fafc;
   font-size: 0.88rem;
+}
+
+.estado-componente .texto-suave {
+  margin-top: 0;
 }
 
 .boton-secundario {
@@ -120,11 +124,6 @@ body.oscuro .icono-panel.rosa {
 
 body.oscuro .estado-componente {
   background: #171717;
-}
-
-body.oscuro .selector-control {
-  background: #1f1f1f;
-  border-color: #2d2d2d;
 }
 
 @media (max-width: 800px) {

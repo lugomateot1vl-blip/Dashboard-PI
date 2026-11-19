@@ -1,26 +1,31 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
+
+  <!-- lo básico para que el navegador sepa cómo mostrar la página -->
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="theme-color" content="#f5f6fb">
   <title>Historial | Sistema Salon 2</title>
 
-  <link
-    href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700&family=Material+Symbols+Rounded"
-    rel="stylesheet"
-  >
+  <!-- cargamos la letra, los iconos y los estilos -->
+  <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700&family=Material+Symbols+Rounded" rel="stylesheet">
   <link rel="stylesheet" href="../style.css">
   <link rel="stylesheet" href="historial.css">
 
+  <!-- chart.js dibuja el gráfico y script.js carga las mediciones -->
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
   <script src="../script.js" defer></script>
-</head>
 
+</head>
 <body data-api-base="../api/bridge.php" data-page="historial" data-metric="humidity">
+
+  <!-- este checkbox abre y cierra el menú en el celular -->
   <input type="checkbox" id="menu-toggle" class="menu-toggle">
 
+  <!-- menú para ir de una página a otra -->
   <aside class="barra-lateral">
+
     <a class="logo" href="../index.html">
       <span class="material-symbols-rounded">air</span>
       <span>Sistema Salon 2</span>
@@ -45,12 +50,17 @@
 
     <div class="lateral-nota">
       <span class="punto-estado"></span>
-      <span>Lecturas guardadas localmente</span>
+      <p>Lecturas guardadas localmente</p>
     </div>
+
   </aside>
 
+  <!-- acá va el contenido de esta página -->
   <main class="principal">
+
+    <!-- título, conexión y botón para cambiar el tema -->
     <header class="encabezado">
+
       <label for="menu-toggle" class="boton-menu" aria-label="Abrir o cerrar menú">
         <span class="material-symbols-rounded">menu</span>
       </label>
@@ -62,23 +72,23 @@
       </div>
 
       <div class="conexion">
+
         <span id="estadoConexion" class="etiqueta amarillo">
           <span class="punto-estado"></span>
           Esperando conexión
         </span>
 
-        <button
-          id="btnTema"
-          class="boton-icono"
-          aria-label="Cambiar tema"
-          title="Cambiar tema"
-        >
+        <button id="btnTema" class="boton-icono" aria-label="Cambiar tema" title="Cambiar tema">
           <span class="material-symbols-rounded">dark_mode</span>
         </button>
+
       </div>
+
     </header>
 
+    <!-- gráfico para comparar las mediciones -->
     <section class="caja caja-grafico historial-grafico">
+
       <div class="encabezado-grafico">
         <div>
           <p class="sobretitulo">TENDENCIA</p>
@@ -88,22 +98,13 @@
           </p>
         </div>
 
+        <!-- elegimos si queremos ver temperatura o humedad -->
         <div class="selector-metrica" role="group" aria-label="Elegir medición">
-          <button
-            type="button"
-            class="filtro-grafico activo"
-            data-metric="humidity"
-            aria-pressed="true"
-          >
+          <button type="button" class="filtro-grafico activo" data-metric="humidity" aria-pressed="true">
             Humedad
           </button>
 
-          <button
-            type="button"
-            class="filtro-grafico"
-            data-metric="temperature"
-            aria-pressed="false"
-          >
+          <button type="button" class="filtro-grafico" data-metric="temperature" aria-pressed="false">
             Temperatura
           </button>
         </div>
@@ -117,22 +118,26 @@
       </div>
 
       <div class="pie-grafico">
-        <span>
+        <div>
           <span class="punto-leyenda"></span>
           <span id="nombreSerie">Humedad (%)</span>
-        </span>
-        <span id="ultimaMuestra">Sin mediciones todavía</span>
+        </div>
+
+        <time id="ultimaMuestra">Sin mediciones todavía</time>
       </div>
+
     </section>
 
+    <!-- tabla con las últimas mediciones guardadas -->
     <section class="caja caja-tabla-historial">
+
       <div class="encabezado-seccion">
         <div>
           <p class="sobretitulo">ÚLTIMOS REGISTROS</p>
           <h2>Mediciones recientes</h2>
         </div>
 
-        <span id="cantidadRegistros" class="texto-suave">0 registros</span>
+        <p id="cantidadRegistros" class="texto-suave">0 registros</p>
       </div>
 
       <div class="tabla-desbordable">
@@ -158,11 +163,15 @@
         El historial se conserva en el almacenamiento local de este navegador
         (hasta las últimas 720 lecturas). No se guarda en el servidor.
       </p>
+
     </section>
+
   </main>
 
+  <!-- acá van los créditos del proyecto -->
   <footer class="pie-pagina">
-    <span>Proyecto de Nicole Roglich, Denise Roglich y Mateo Lugo</span>
+    <p>Proyecto de Nicole Roglich, Denise Roglich y Mateo Lugo</p>
   </footer>
+
 </body>
 </html>

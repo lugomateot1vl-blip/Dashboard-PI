@@ -1,11 +1,13 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
+  <!-- lo básico para que el navegador sepa cómo mostrar la página -->
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="theme-color" content="#f5f6fb">
   <title>Resumen | Sistema Salon 2</title>
 
+  <!-- cargamos la letra, los iconos y los estilos -->
   <link
     href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700&family=Material+Symbols+Rounded"
     rel="stylesheet"
@@ -13,6 +15,7 @@
   <link rel="stylesheet" href="style.css">
   <link rel="stylesheet" href="resumen.css">
 
+  <!-- chart.js dibuja el gráfico y script.js actualiza los datos -->
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
   <script src="script.js" defer></script>
 </head>
@@ -21,8 +24,10 @@
   data-page="resumen"
   data-metric="temperature"
 >
+  <!-- este checkbox abre y cierra el menú en el celular -->
   <input type="checkbox" id="menu-toggle" class="menu-toggle">
 
+  <!-- menú para ir de una página a otra -->
   <aside class="barra-lateral">
     <a class="logo" href="index.html">
       <span class="material-symbols-rounded">air</span>
@@ -46,11 +51,13 @@
 
     <div class="lateral-nota">
       <span class="punto-estado"></span>
-      <span>Panel de monitoreo</span>
+      <p>Panel de monitoreo</p>
     </div>
   </aside>
 
+  <!-- acá va el contenido de esta página -->
   <main class="principal">
+    <!-- título, conexión y botón para cambiar el tema -->
     <header class="encabezado">
       <label for="menu-toggle" class="boton-menu" aria-label="Abrir o cerrar menú">
         <span class="material-symbols-rounded">menu</span>
@@ -78,15 +85,17 @@
       </div>
     </header>
 
+    <!-- resumen de las lecturas actuales -->
     <section class="bloque-seccion">
       <div class="encabezado-seccion">
         <div>
           <p class="sobretitulo">EN VIVO</p>
           <h2>Estado general</h2>
         </div>
-        <span class="texto-suave">Se actualiza cada 2 segundos</span>
+        <p class="texto-suave">Se actualiza cada 2 segundos</p>
       </div>
 
+      <!-- cada tarjeta muestra una lectura o el estado de un dispositivo -->
       <div class="tarjetas resumen-tarjetas">
         <button
           type="button"
@@ -128,34 +137,35 @@
           <span class="icono-tarjeta ambar material-symbols-rounded">
             notifications_active
           </span>
-          <span class="tarjeta-titulo">Control de humedad</span>
-          <span class="tarjeta-valor texto-estado" id="valorModo">--</span>
-          <span class="ayuda-tarjeta">Modo actual</span>
+          <p class="tarjeta-titulo">Control de humedad</p>
+          <p class="tarjeta-valor texto-estado" id="valorModo">--</p>
+          <p class="ayuda-tarjeta">Modo actual</p>
         </article>
 
         <article class="tarjeta tarjeta-estado">
           <span class="icono-tarjeta verde material-symbols-rounded">
             mode_fan
           </span>
-          <span class="tarjeta-titulo">Ventilador</span>
-          <span class="tarjeta-valor texto-estado" id="valorFan">--</span>
-          <span class="ayuda-tarjeta">Estado actual</span>
+          <p class="tarjeta-titulo">Ventilador</p>
+          <p class="tarjeta-valor texto-estado" id="valorFan">--</p>
+          <p class="ayuda-tarjeta">Estado actual</p>
         </article>
 
         <article class="tarjeta tarjeta-estado">
           <span class="icono-tarjeta rosa material-symbols-rounded">
             lightbulb
           </span>
-          <span class="tarjeta-titulo">Iluminación</span>
-          <span class="tarjeta-valor">
+          <p class="tarjeta-titulo">Iluminación</p>
+          <p class="tarjeta-valor">
             <span id="valorLuz">--</span>
             <small>%</small>
-          </span>
-          <span class="ayuda-tarjeta">Nivel de brillo</span>
+          </p>
+          <p class="ayuda-tarjeta">Nivel de brillo</p>
         </article>
       </div>
     </section>
 
+    <!-- últimas mediciones recibidas -->
     <section class="caja caja-grafico">
       <div class="encabezado-grafico">
         <div>
@@ -180,14 +190,15 @@
       </div>
 
       <div class="pie-grafico">
-        <span>
+        <div>
           <span class="punto-leyenda"></span>
           <span id="nombreSerie">Temperatura (°C)</span>
-        </span>
-        <span id="ultimaMuestra">Sin mediciones todavía</span>
+        </div>
+        <time id="ultimaMuestra">Sin mediciones todavía</time>
       </div>
     </section>
 
+    <!-- una nota sobre el control automático -->
     <section class="tarjeta-ayuda">
       <span class="material-symbols-rounded">info</span>
       <p>
@@ -198,8 +209,9 @@
     </section>
   </main>
 
+  <!-- acá van los créditos del proyecto -->
   <footer class="pie-pagina">
-    <span>Proyecto de Nicole Roglich, Denise Roglich y Mateo Lugo</span>
+    <p>Proyecto de Nicole Roglich, Denise Roglich y Mateo Lugo</p>
   </footer>
 </body>
 </html>
